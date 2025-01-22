@@ -715,8 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 2
-  player: {fileID: 0}
-  test: {fileID: 0}
+  path: []
 --- !u!1 &50121897
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,7 +874,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 48440201}
+      - m_Target: {fileID: 62483337}
         m_TargetAssemblyTypeName: NavigationItem, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
@@ -938,8 +937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 0
-  player: {fileID: 0}
-  test: {fileID: 0}
+  path: []
 --- !u!1 &85094072
 GameObject:
   m_ObjectHideFlags: 0
@@ -9701,7 +9699,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 48440201}
+      - m_Target: {fileID: 1565381632}
         m_TargetAssemblyTypeName: NavigationItem, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
@@ -9763,9 +9761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f54462ff592d34ab0a869d5835a8bcab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 3
-  player: {fileID: 0}
-  test: {fileID: 0}
+  direction: 1
+  path: []
 --- !u!1 &1577303877
 GameObject:
   m_ObjectHideFlags: 0
@@ -11412,8 +11409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 3
-  player: {fileID: 0}
-  test: {fileID: 0}
+  path: []
 --- !u!1 &2004312171
 GameObject:
   m_ObjectHideFlags: 0

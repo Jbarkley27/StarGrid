@@ -9,10 +9,23 @@ public class NavigationItem: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnClick()
     {
-        GridSystem.instance.MovePlayer(direction);
+        // Debug.Log("Clicked Path Size: " + path.Count);
+        // Debug.Log("Clicked Direction: " + direction);
+        GridSystem.instance.MovePlayer(direction, path);
+        ClearPath();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
+    {
+        GetPath();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ClearPath();
+    }
+
+    public void GetPath()
     {
         path = GridSystem.instance.GetSelectedTiles(direction);
         foreach (Tile tile in path)
@@ -21,7 +34,7 @@ public class NavigationItem: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void ClearPath()
     {
         foreach (Tile tile in path)
         {

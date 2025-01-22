@@ -59,12 +59,13 @@ public class GridSystem : MonoBehaviour
         ReadGrid();
 
         // Navigation
-        moveUp.interactable = CanMovePlayer(Direction.UP) && !isPlayerMoving;
-        moveDown.interactable = CanMovePlayer(Direction.DOWN) && !isPlayerMoving;
-        moveLeft.interactable = CanMovePlayer(Direction.LEFT) && !isPlayerMoving;
-        moveRight.interactable = CanMovePlayer(Direction.RIGHT) && !isPlayerMoving;
-
+        moveUp.gameObject.SetActive(CanMovePlayer(Direction.UP) && !isPlayerMoving);
+        moveDown.gameObject.SetActive(CanMovePlayer(Direction.DOWN) && !isPlayerMoving);
+        moveLeft.gameObject.SetActive(CanMovePlayer(Direction.LEFT) && !isPlayerMoving);
+        moveRight.gameObject.SetActive(CanMovePlayer(Direction.RIGHT) && !isPlayerMoving);
     }
+
+
 
 
     private void CreateGrid()
@@ -130,20 +131,6 @@ public class GridSystem : MonoBehaviour
     }
 
 
-    // Using the players pattern list and the currently selected tile, check if the player can place the pattern
-    // public bool CanPlacePattern()
-    // {
-    //     foreach (Tile tile in playerPattern.patternTiles)
-    //     {
-    //         if (playerGrid[tile.x, tile.y].tileStates.Contains(Tile.TileState.Occupied))
-    //         {
-    //             return false;
-    //         }
-    //     }
-    //     return true;
-    // }
-
-
     public bool IsValidPosition(int x, int y)
     {
         if (x < 0 || x >= width || y < 0 || y >= height)
@@ -169,6 +156,13 @@ public class GridSystem : MonoBehaviour
                     break;
                 case Direction.DOWN:
                     y--;
+
+                    // if (y < 0)
+                    // {
+                    //     int width = 12 + y;
+                    //     x--;
+                    //     y = width;
+                    // }
                     break;
                 case Direction.LEFT:
                     // Similar to the Right direction, but we are subtracting from the Y value
@@ -220,10 +214,25 @@ public class GridSystem : MonoBehaviour
             switch (direction)
             {
                 case Direction.UP:
-                    x++;
+                    y++;
+
+                    // if (y >= 12)
+                    // {
+                    //     int width = y - 12;
+                    //     x++;
+                    //     y = width;
+                    // }
+
                     break;
                 case Direction.DOWN:
-                    x--;
+                    y--;
+
+                    // if (y < 0)
+                    // {
+                    //     int width = 12 + y;
+                    //     x--;
+                    //     y = width;
+                    // }
                     break;
                 case Direction.LEFT:
                     // Similar to the Right direction, but we are subtracting from the Y value
@@ -273,8 +282,15 @@ public class GridSystem : MonoBehaviour
 
 
     public Vector3 GetCenterOfSelectedTiles(List<Tile> selectedTiles) {
+        if (selectedTiles.Count == 0)
+        {
+            Debug.LogError("No selected tiles");
+            return Vector3.zero;
+        }
+
         Vector3 center = Vector3.zero;
         foreach (Tile tile in selectedTiles) {
+            Debug.Log("Tile : " + tile.gameObject.name);
             center += tile.transform.position;
         }
         center /= selectedTiles.Count;
@@ -282,7 +298,7 @@ public class GridSystem : MonoBehaviour
     }
 
 
-    public void MovePlayer(Direction direction)
+    public void MovePlayer(Direction direction, List<Tile> selectedTiles)
     {
         if (!CanMovePlayer(direction) || isPlayerMoving)
         {
@@ -292,7 +308,7 @@ public class GridSystem : MonoBehaviour
         isPlayerMoving = true;
 
         // find the center of the selected tiles using the rectTransform
-        List<Tile> selectedTiles = GetSelectedTiles(direction);
+        // List<Tile> selectedTiles = GetSelectedTiles(direction);
     
         centerPointOfSelectedTiles = GetCenterOfSelectedTiles(selectedTiles);
 
