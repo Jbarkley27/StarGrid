@@ -7,6 +7,13 @@ public class NavigationItem: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public GridSystem.Direction direction;
     public List<Tile> path = new List<Tile>();
 
+
+
+
+
+
+
+    // POINTER EVENTS
     public void OnClick()
     {
         GridSystem.instance.MovePlayer(direction, path);
@@ -23,6 +30,10 @@ public class NavigationItem: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         ClearPath();
     }
 
+
+
+
+    // PATHING FUNCTIONS
     public void GetPath()
     {
         path = GridSystem.instance.GetSelectedTiles(direction);
