@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class GridSystem : MonoBehaviour
 {
-    // 2D grid of 
     public Tile[,] playerGrid;
     public Tile[,] enemyGrid;
 
@@ -30,10 +29,9 @@ public class GridSystem : MonoBehaviour
     public Button moveLeft;
     public Button moveRight;
     public Vector3 centerPointOfSelectedTiles;
-    public float xUnitSize;
-    public float yUnitSize;
-    public GameObject player;
     public bool isPlayerMoving = false;
+    public enum Direction {UP, DOWN, LEFT, RIGHT};
+
 
     private void Awake()
     {
@@ -56,13 +54,8 @@ public class GridSystem : MonoBehaviour
 
     private void Update() 
     {
-        ReadGrid();
-
-        // Navigation
-        moveUp.gameObject.SetActive(CanMovePlayer(Direction.UP) && !isPlayerMoving);
-        moveDown.gameObject.SetActive(CanMovePlayer(Direction.DOWN) && !isPlayerMoving);
-        moveLeft.gameObject.SetActive(CanMovePlayer(Direction.LEFT) && !isPlayerMoving);
-        moveRight.gameObject.SetActive(CanMovePlayer(Direction.RIGHT) && !isPlayerMoving);
+        ReadPlayerGrid();
+        HandleNavigationUI();
     }
 
 
@@ -115,7 +108,7 @@ public class GridSystem : MonoBehaviour
 
 
 
-    public void ReadGrid()
+    public void ReadPlayerGrid()
     {
         // set occupied tiles
         foreach (Tile tile in playerPattern.patternTiles)
@@ -131,6 +124,8 @@ public class GridSystem : MonoBehaviour
     }
 
 
+
+
     public bool IsValidPosition(int x, int y)
     {
         if (x < 0 || x >= width || y < 0 || y >= height)
@@ -139,8 +134,6 @@ public class GridSystem : MonoBehaviour
         }
         return true;
     }
-
-    public enum Direction {UP, DOWN, LEFT, RIGHT};
 
     public bool CanMovePlayer(Direction direction)
     {
@@ -156,16 +149,9 @@ public class GridSystem : MonoBehaviour
                     break;
                 case Direction.DOWN:
                     y--;
-
-                    // if (y < 0)
-                    // {
-                    //     int width = 12 + y;
-                    //     x--;
-                    //     y = width;
-                    // }
                     break;
                 case Direction.LEFT:
-                    // Similar to the Right direction, but we are subtracting from the Y value
+                    // Left requires special handling because of the grid layout
                     y-=6;
 
                     if (y < 0)
@@ -176,7 +162,7 @@ public class GridSystem : MonoBehaviour
                     }
                     break;
                 case Direction.RIGHT:
-                    // ADD 6 TO Y, IF GREATER THAN WIDTH, INCREASE X BY 1 AND ADD THE LEFTOVER TO Y FROM 0
+                    // Right requires special handling because of the grid layout
                     y+=6;
 
                     if (y >= 12)
@@ -195,9 +181,12 @@ public class GridSystem : MonoBehaviour
 
             if (playerGrid[x, y].tileStates.Contains(Tile.TileState.Blocked))
             {
+                Debug.Log("Blocked Position " + x + " " + y);
                 return false;
             }
         }
+
+
         return true;
     }
 
@@ -207,7 +196,6 @@ public class GridSystem : MonoBehaviour
 
         foreach (Tile tile in playerPattern.patternTiles)
         {
-            // Debug.Log("Tile: " + tile.x + " " + tile.y);
             int x = tile.x;
             int y = tile.y;
 
@@ -215,27 +203,12 @@ public class GridSystem : MonoBehaviour
             {
                 case Direction.UP:
                     y++;
-
-                    // if (y >= 12)
-                    // {
-                    //     int width = y - 12;
-                    //     x++;
-                    //     y = width;
-                    // }
-
                     break;
                 case Direction.DOWN:
                     y--;
-
-                    // if (y < 0)
-                    // {
-                    //     int width = 12 + y;
-                    //     x--;
-                    //     y = width;
-                    // }
                     break;
                 case Direction.LEFT:
-                    // Similar to the Right direction, but we are subtracting from the Y value
+                    // Left requires special handling because of the grid layout
                     y-=6;
 
                     if (y < 0)
@@ -246,7 +219,7 @@ public class GridSystem : MonoBehaviour
                     }
                     break;
                 case Direction.RIGHT:
-                    // ADD 6 TO Y, IF GREATER THAN WIDTH, INCREASE X BY 1 AND ADD THE LEFTOVER TO Y FROM 0
+                    // Right requires special handling because of the grid layout
                     y+=6;
 
                     if (y >= 12)
@@ -271,17 +244,9 @@ public class GridSystem : MonoBehaviour
         return selectedTiles;
     }
 
-    public Tile GetTile(int x, int y)
-    {
-        if (!IsValidPosition(x, y))
-        {
-            return null;
-        }
-        return playerGrid[x, y];
-    }
-
 
     public Vector3 GetCenterOfSelectedTiles(List<Tile> selectedTiles) {
+
         if (selectedTiles.Count == 0)
         {
             Debug.LogError("No selected tiles");
@@ -289,10 +254,9 @@ public class GridSystem : MonoBehaviour
         }
 
         Vector3 center = Vector3.zero;
-        foreach (Tile tile in selectedTiles) {
-            Debug.Log("Tile : " + tile.gameObject.name);
-            center += tile.transform.position;
-        }
+
+        foreach (Tile tile in selectedTiles) center += tile.transform.position;
+
         center /= selectedTiles.Count;
         return center;
     }
@@ -306,28 +270,30 @@ public class GridSystem : MonoBehaviour
         }
 
         isPlayerMoving = true;
-
-        // find the center of the selected tiles using the rectTransform
-        // List<Tile> selectedTiles = GetSelectedTiles(direction);
     
         centerPointOfSelectedTiles = GetCenterOfSelectedTiles(selectedTiles);
 
-        Debug.Log("Center Point: " + centerPointOfSelectedTiles);
-        Debug.Log("Selected Tiles: " + selectedTiles.Count);
-
-        player.transform.DOMove(centerPointOfSelectedTiles, 0.5f).SetEase(Ease.Linear).OnComplete(() => {
+        GlobalDataStore.instance.player.transform.DOMove(centerPointOfSelectedTiles, 0.5f).SetEase(Ease.Linear).OnComplete(() => {
             isPlayerMoving = false;
         });
+    }
 
 
 
 
 
-        // Vector3 moveVector = direction == Direction.UP || direction == Direction.DOWN ? yMoveVector : xMoveVector;
 
-        // player.GetComponent<Rigidbody>().DOMove(player.transform.position + moveVector, 0.5f).SetEase(Ease.Linear).OnComplete(() => {
-        //     isPlayerMoving = false;
-        // });
+
+
+
+
+    // NAVIGATION UI ---------------------------------------------------------------------
+    public void HandleNavigationUI()
+    {
+        moveUp.gameObject.SetActive(CanMovePlayer(Direction.UP) && !isPlayerMoving);
+        moveDown.gameObject.SetActive(CanMovePlayer(Direction.DOWN) && !isPlayerMoving);
+        moveLeft.gameObject.SetActive(CanMovePlayer(Direction.LEFT) && !isPlayerMoving);
+        moveRight.gameObject.SetActive(CanMovePlayer(Direction.RIGHT) && !isPlayerMoving);
     }
     
 }

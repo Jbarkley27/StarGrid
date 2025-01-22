@@ -9,8 +9,6 @@ public class NavigationItem: MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnClick()
     {
-        // Debug.Log("Clicked Path Size: " + path.Count);
-        // Debug.Log("Clicked Direction: " + direction);
         GridSystem.instance.MovePlayer(direction, path);
         ClearPath();
     }
