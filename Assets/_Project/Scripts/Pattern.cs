@@ -1,18 +1,17 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class Pattern: MonoBehaviour
 {
-      // Represents the players shape on the board
+    // Represents the players shape on the board
     public List<Tile> patternTiles = new List<Tile>();
     
 
-    // Trigger Functions
+    // TRIGGER EVENTS ---------------------------------------------
     private void OnTriggerEnter(Collider other) 
     {
-        if (other.gameObject.tag == "tile") {
-           
+        if (other.gameObject.tag == "tile") 
+        {   
             // check if it has a Tile component
             Tile tile = other.gameObject.GetComponent<Tile>();
             if (tile != null) {

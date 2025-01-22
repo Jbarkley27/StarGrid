@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
 
 public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -48,6 +46,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         AddState(TileState.Empty);
     } 
 
+    
+
     public void InitialAppearance()
     {
         mainState.alpha = 0f;
@@ -57,6 +57,12 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         emptyStateGO.transform.DOScale(Vector3.one, Random.Range(.3f,0.8f)).SetEase(Ease.OutBack);
     }
 
+
+
+
+
+
+    // STATE MANAGEMENT ---------------------------------------------
     public void ReadState()
     {
         float targetAlphaBuild = 0f;
@@ -101,6 +107,10 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         }
     }
 
+
+
+
+    // POINTER EVENTS ---------------------------------------------
     public void OnPointerEnter(PointerEventData eventData)
     {
         AddState(TileState.Hovered);

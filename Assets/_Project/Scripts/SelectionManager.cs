@@ -1,15 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System.Numerics;
 using Vector3 = UnityEngine.Vector3;
 
 public class SelectionManager: MonoBehaviour
 {
-    public List<Tile> selectedTiles = new List<Tile>();
     public Tile hoveredTile;
-    public GameObject player;
     public static SelectionManager instance;
     public TMP_Text selectionText;
     public enum SelectionState {MOVE, SINGLE_ATTACK, MULTI_ATTACK, NONE};
@@ -28,16 +24,19 @@ public class SelectionManager: MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start() {
+    private void Start() 
+    {
         selectionState = SelectionState.NONE;
-        player.transform.position = playerStartingPosition;
+        GlobalDataStore.instance.player.transform.position = playerStartingPosition;
     }
 
-    private void Update() {
+    private void Update() 
+    {
         selectionText.text = selectionState.ToString();
     }
 
-    public void SetSelectionState(SelectionState state) {
+    public void SetSelectionState(SelectionState state) 
+    {
         selectionState = state;
     }
 
