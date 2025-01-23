@@ -46,7 +46,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         AddState(TileState.Empty);
     } 
 
-    
+
 
     public void InitialAppearance()
     {
@@ -75,7 +75,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             }
             else if (tileState == TileState.Occupied)
             {
-                targetAlphaBuild += -0.04f;
+                targetAlphaBuild += -0.08f;
             }
             else if (tileState == TileState.Hovered)
             {

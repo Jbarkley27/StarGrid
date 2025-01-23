@@ -15,13 +15,12 @@ public class GridSystem : MonoBehaviour
 
     public GameObject enemyGridRoot;
     public GameObject playerGridRoot;
-
     public GridLayoutGroup enemyGridLayout;
     public GridLayoutGroup playerGridLayout;
-
     public static GridSystem instance;
     public Pattern playerPattern;
     public Pattern enemyPattern;
+
 
     [Header("Navigation")]
     public Button moveUp;
@@ -48,7 +47,7 @@ public class GridSystem : MonoBehaviour
 
     private void Start()
     {
-        CreateGrid();
+        CreateGrids();
     }
 
 
@@ -61,7 +60,7 @@ public class GridSystem : MonoBehaviour
 
 
 
-    private void CreateGrid()
+    private void CreateGrids()
     {
         // remove all children
         foreach (Transform child in enemyGridRoot.transform)
@@ -110,17 +109,25 @@ public class GridSystem : MonoBehaviour
 
     public void ReadPlayerGrid()
     {
+        if (playerPattern == null) return;
+
         // set occupied tiles
         foreach (Tile tile in playerPattern.patternTiles)
         {
             playerGrid[tile.x, tile.y].AddState(Tile.TileState.Occupied);
         }
+    }
 
-        // enemy occupied tiles
-        // foreach (Tile tile in enemyPattern.patternTiles)
-        // {
-        //     enemyGrid[tile.x, tile.y].AddState(Tile.TileState.Occupied);
-        // }
+
+    public void ReadEnemyGrid()
+    {
+        if (enemyPattern == null) return;
+
+        // set occupied tiles
+        foreach (Tile tile in enemyPattern.patternTiles)
+        {
+            enemyGrid[tile.x, tile.y].AddState(Tile.TileState.Occupied);
+        }
     }
 
 
