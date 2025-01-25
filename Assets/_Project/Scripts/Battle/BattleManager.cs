@@ -16,9 +16,13 @@ public class BattleManager : MonoBehaviour
     public EnemyEndTurnBattleState enemyEndTurnState;
     public BattleWinState winState;
     public BattleLoseState loseState;
-
-
     public BattleStepState battleState;
+
+    public GameObject player;
+    public GameObject enemy;
+    public GameObject enemy_2;
+    public GameObject enemy_3;
+    
 
     private void Awake()
     {

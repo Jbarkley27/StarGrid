@@ -20,6 +20,8 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public List<TileState> tileStates = new List<TileState>();
     public float transitionSpeed = 5f;
 
+    public Combatant combatant;
+
     public enum TileState
     {
         Empty,
@@ -36,28 +38,41 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         mainState.alpha = Mathf.Lerp(mainState.alpha, currentTargetAlpha, Time.deltaTime * transitionSpeed);
     }
 
-    
 
-    public void SetPosition(int x, int y)
-    {
-        InitialAppearance();
-        this.x = x;
-        this.y = y;
+    private void Awake() {
+        mainState = GetComponent<CanvasGroup>();
         AddState(TileState.Empty);
-    } 
-
-
-
-    public void InitialAppearance()
-    {
-        mainState.alpha = 0f;
-        emptyStateGO.transform.localScale = Vector3.zero;
-
-        mainState.DOFade(1f, Random.Range(.2f, .3f)).SetEase(Ease.InOutSine);
-        emptyStateGO.transform.DOScale(Vector3.one, Random.Range(.3f,0.8f)).SetEase(Ease.OutBack);
     }
 
 
+    private void Start() 
+    {
+        // mainState.alpha = 0f;
+        mainState.DOFade(1f, Random.Range(.1f, .5f)).OnComplete(() => {
+            AddState(TileState.Empty);
+        });
+    }
+
+
+    public void SetCombatant(Combatant combatant)
+    {
+        if (this.combatant != null)
+        {
+            // disconnect combatant from tile
+            this.combatant.RemoveTile();
+        }
+
+        // connect combatant to tile
+        this.combatant = combatant;
+        this.combatant.AssignTile(this);
+        AddState(TileState.Occupied);
+    }
+
+    public void RemoveCombatant()
+    {
+        combatant = null;
+        RemoveState(TileState.Occupied);
+    }
 
 
 
@@ -71,7 +86,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             if (tileState == TileState.Empty)
             {
-                targetAlphaBuild += 0.10f;
+                targetAlphaBuild += 0.15f;
             }
             else if (tileState == TileState.Occupied)
             {

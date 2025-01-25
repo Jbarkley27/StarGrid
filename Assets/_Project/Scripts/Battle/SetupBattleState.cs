@@ -18,6 +18,11 @@ public class SetupBattleState : BattleState
     {
         // DO ALL TIMED ACTIONS HERE
         Debug.Log("Setting Up Battle");
+        Debug.Log("Creating Grid");
+
+        GridManager.instance.CreateGrid();
+        SpawnManager.instance.SpawnPlayer();
+        SpawnManager.instance.SpawnEnemy();
 
         yield return new WaitForSeconds(.2f);
 
