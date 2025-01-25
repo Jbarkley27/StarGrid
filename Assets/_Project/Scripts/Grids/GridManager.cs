@@ -65,6 +65,10 @@ public class GridManager : MonoBehaviour
                 tile.x = x;
                 tile.y = y;
                 playGrid[x, y] = tile;
+
+                // Create a sphere at the position of the tile
+                // GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                // sphere.transform.position = new Vector3(x, 0, y);
             }
         }
     }

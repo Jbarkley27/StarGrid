@@ -1,4 +1,8 @@
+using System.Numerics;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
+using Quaternion = UnityEngine.Quaternion;
+using DG.Tweening;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -19,6 +23,7 @@ public class SpawnManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+
     public void SpawnPlayer()
     {
         
@@ -28,18 +33,10 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.Log("Spawning player on tile: " + randomTile.name);
             Debug.Log("Position: " + randomTile.x + ", " + randomTile.y);
-            Combatant newPlayer = Instantiate(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity, randomTile.transform.GetChild(0));
+            Combatant newPlayer = Instantiate(playerPrefab, randomTile.combatantSpawnPoint);
 
-
-            newPlayer.transform.position = Vector3.zero;
-
-            // newPlayer.transform.position = new Vector3(
-            //     newPlayer.transform.position.x,
-            //     randomTile.gameObject.transform.position.y + combatantHeightOffset,
-            //     randomTile.gameObject.transform.position.z
-            // );
-            
-            
+            // Set the player's position to match the tile's position
+            newPlayer.transform.DOLocalMove(Vector3.zero, 1f).SetEase(Ease.InSine);   
             randomTile.SetCombatant(newPlayer);
         } else
         {
@@ -49,19 +46,17 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        Combatant newEnemy = Instantiate(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
         Tile randomTile = GridManager.instance.GetRandomAvailableTile();
 
         if (randomTile != null)
         {
+            Combatant newEnemy = Instantiate(playerPrefab, randomTile.combatantSpawnPoint);
             Debug.Log("Spawning enemy on tile: " + randomTile.name);
             Debug.Log("Position: " + randomTile.gameObject.transform.position);
-            newEnemy.transform.position = new Vector3(
-                randomTile.gameObject.transform.position.x,
-                randomTile.gameObject.transform.position.y + combatantHeightOffset,
-                randomTile.gameObject.transform.position.z
-            );
+        
 
+            // Set the player's position to match the tile's position
+            newEnemy.transform.DOLocalMove(Vector3.zero, 1f).SetEase(Ease.InSine);   
             randomTile.SetCombatant(newEnemy);
         } else
         {

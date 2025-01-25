@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public float transitionSpeed = 5f;
 
     public Combatant combatant;
+    public Transform combatantSpawnPoint;
 
     public enum TileState
     {
@@ -90,7 +91,7 @@ public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             }
             else if (tileState == TileState.Occupied)
             {
-                targetAlphaBuild += -0.08f;
+                targetAlphaBuild += 0.30f;
             }
             else if (tileState == TileState.Hovered)
             {
